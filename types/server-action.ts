@@ -1,0 +1,40 @@
+import type z from "zod"
+import { fromZodError } from "zod-validation-error"
+
+declare const brand: unique symbol
+
+type Brand<T, TBrand extends string> = T & { [brand]: TBrand }
+
+type ActionType<InputType extends z.ZodTypeAny, ResponseType extends any> = (
+  input: z.input<InputType>
+) => Promise<ResponseType>
+
+export type ServerAction<
+  InputType extends z.ZodTypeAny,
+  ResponseType extends any
+> = Brand<ActionType<InputType, ResponseType>, "server-action">
+
+export function serverValidate<InputType extends z.ZodTypeAny>(
+  validator?: InputType
+) {
+  // This is the "factory" that is created on call of zact. You pass it a "use server" function and it will validate the input before you call it
+  return function <ResponseType extends any>(
+    action: ActionType<InputType, ResponseType>
+  ): ServerAction<InputType, ResponseType> {
+    // The wrapper that actually validates
+    const validatedAction = async (input: z.input<InputType>) => {
+      if (validator) {
+        // This will throw if the input is invalid
+        const result = validator.safeParse(input)
+
+        if (!result.success) {
+          const validatedError = fromZodError(result.error)
+          throw validatedError
+        }
+      }
+      return await action(input)
+    }
+
+    return validatedAction as ServerAction<InputType, ResponseType>
+  }
+}
