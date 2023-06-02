@@ -2,7 +2,7 @@ import { QrGenerator } from "@/components/qr-generator"
 
 export default function IndexPage() {
   return (
-    <section>
+    <section className="container max-w-md">
       <QrGenerator />
     </section>
   )
