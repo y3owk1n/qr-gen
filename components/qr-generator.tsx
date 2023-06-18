@@ -55,7 +55,7 @@ export function QrGenerator() {
   }
 
   return (
-    <div className="grid gap-8">
+    <div className="grid gap-8 py-10">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
           <FormField
@@ -116,7 +116,8 @@ export function QrGenerator() {
       {generateQRCodeData && (
         <div className="grid gap-4">
           <Separator />
-          <p className="text-muted-foreground text-sm">
+          <img src={generateQRCodeData} className="h-full w-full" />
+          <p className="text-sm text-muted-foreground">
             Click the button below to download
           </p>
           <a
