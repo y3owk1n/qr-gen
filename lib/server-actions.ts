@@ -6,7 +6,7 @@ import { z } from "zod"
 import { serverValidate } from "@/types/server-action"
 
 const qrGenFormSchema = z.object({
-  input: z.string().min(2).max(50),
+  input: z.string().min(2).max(255),
   scale: z.number().min(1).max(100),
 })
 
@@ -14,7 +14,7 @@ export const generateQrCode = serverValidate(qrGenFormSchema)(
   async ({ input, scale }) => {
     try {
       const generated = await QRCode.toDataURL(input, {
-        margin: 2,
+        margin: 1,
         scale,
       })
 

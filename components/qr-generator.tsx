@@ -8,6 +8,7 @@ import * as z from "zod"
 import { generateQrCode } from "@/lib/server-actions"
 import { useServerAction } from "@/hooks/useServerAction"
 
+import { AspectRatio } from "./ui/aspect-ratio"
 import { Button, buttonVariants } from "./ui/button"
 import {
   Form,
@@ -32,7 +33,7 @@ export function QrGenerator() {
     resolver: zodResolver(qrGenFormSchema),
     defaultValues: {
       input: "",
-      scale: 4,
+      scale: 10,
     },
   })
 
@@ -116,7 +117,13 @@ export function QrGenerator() {
       {generateQRCodeData && (
         <div className="grid gap-4">
           <Separator />
-          <img src={generateQRCodeData} className="h-full w-full" />
+
+          <AspectRatio ratio={1}>
+            <img
+              src={generateQRCodeData}
+              className="h-full w-auto object-cover"
+            />
+          </AspectRatio>
           <p className="text-sm text-muted-foreground">
             Click the button below to download
           </p>
