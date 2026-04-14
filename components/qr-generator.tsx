@@ -24,7 +24,7 @@ import { Separator } from "./ui/separator"
 import { toast } from "./ui/use-toast"
 
 export const qrGenFormSchema = z.object({
-  input: z.string().min(2).max(50),
+  input: z.string().min(2),
   scale: z.number().min(1).max(100),
 })
 
